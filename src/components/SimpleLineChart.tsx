@@ -1,68 +1,68 @@
-import React from 'react';
-import ReactApexChart from 'react-apexcharts';
-import type { ApexOptions } from 'apexcharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface SimpleLineChartProps {
-  series: { name: string; data: { x: any; y: any }[] }[];
+  data: { x: any; y: any }[];
   title: string;
-  height?: number;
+  description: string;
+  yAxisLabel?: string;
 }
 
-const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ series, title, height = 350 }) => {
-  const options: ApexOptions = {
-    chart: {
-      type: 'area',
-      height: height,
-      background: 'transparent',
-      zoom: { enabled: false },
-      toolbar: { show: false },
-    },
-    theme: {
-      mode: 'dark',
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      curve: 'smooth',
-    },
-    title: {
-      text: title,
-      align: 'left',
-      style: { color: '#FFFFFF', fontSize: '16px' }
-    },
-    xaxis: {
-      type: 'datetime',
-    },
-    yaxis: {
-      labels: {
-        formatter: (value) => value.toLocaleString(),
-      }
-    },
-    grid: {
-      borderColor: '#4A5568',
-      strokeDashArray: 4,
-    },
-    tooltip: {
-      theme: 'dark',
-      x: {
-        format: 'dd MMM yyyy'
-      }
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
-        stops: [0, 90, 100]
-      }
-    }
-  };
-
+export default function SimpleLineChart({ data, title, description, yAxisLabel = "$" }: SimpleLineChartProps) {
   return (
-    <ReactApexChart options={options} series={series} type='area' height={height} />
-  );
-};
-
-export default SimpleLineChart;
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[250px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 10,
+                left: -20,
+                bottom: 0,
+              }}
+            >
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="x"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${yAxisLabel}${value.toLocaleString()}`}
+              />
+              <Tooltip
+                cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 2, strokeDasharray: '3 3' }}
+                contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }}
+              />
+              <Area type="monotone" dataKey="y" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorUv)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

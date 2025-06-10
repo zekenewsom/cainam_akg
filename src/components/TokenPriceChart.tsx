@@ -1,69 +1,72 @@
-import React from 'react';
-import ReactApexChart from 'react-apexcharts';
-import type { ApexOptions } from 'apexcharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
+// The OHLC data is [open, high, low, close]. We only need the close price (index 3).
 interface TokenPriceChartProps {
   data: { x: Date; y: number[] }[];
 }
 
-const TokenPriceChart: React.FC<TokenPriceChartProps> = ({ data }) => {
-  const options: ApexOptions = {
-    chart: {
-      type: 'candlestick',
-      height: 350,
-      background: 'transparent',
-      toolbar: {
-        show: true,
-        tools: {
-          download: false,
-          selection: true,
-          zoom: true,
-          zoomin: true,
-          zoomout: true,
-          pan: true,
-        },
-      },
-    },
-    theme: {
-      mode: 'dark',
-    },
-    title: {
-      text: 'Price Chart',
-      align: 'left',
-      style: {
-        color: '#FFFFFF'
-      }
-    },
-    xaxis: {
-      type: 'datetime',
-    },
-    yaxis: {
-      tooltip: {
-        enabled: true,
-      },
-      labels: {
-        formatter: (value) => `<span class=math-inline>\</span>{value.toFixed(4)}`,
-      }
-    },
-    grid: {
-      borderColor: '#4A5568', // gray-700
-      strokeDashArray: 4,
-    },
-    tooltip: {
-      theme: 'dark',
-    }
-  };
-
-  const series = [{
-    name: 'candle',
-    data: data
-  }];
+export default function TokenPriceChart({ data }: TokenPriceChartProps) {
+  const chartData = data.map(d => ({
+    x: d.x.getTime(),
+    y: d.y[3] // Use the closing price
+  }));
 
   return (
-    <div className='bg-gray-800 p-6 rounded-lg'>
-      <ReactApexChart options={options} series={series} type='candlestick' height={350} />
-    </div>
-  );
-};
-
-export default TokenPriceChart;
+    <Card>
+      <CardHeader>
+        <CardTitle>Price Chart</CardTitle>
+        <CardDescription>Price history for the selected token.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[350px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={chartData}
+              margin={{
+                top: 5,
+                right: 10,
+                left: -20,
+                bottom: 0,
+              }}
+            >
+              <defs>
+                <linearGradient id="priceChartFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="x"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              />
+              <YAxis
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `$${value.toFixed(4)}`}
+              />
+              <Tooltip
+                cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 2, strokeDasharray: '3 3' }}
+                contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }}
+                formatter={(value: number) => [`$${value.toFixed(4)}`, "Price"]}
+              />
+              <Area type="monotone" dataKey="y" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#priceChartFill)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

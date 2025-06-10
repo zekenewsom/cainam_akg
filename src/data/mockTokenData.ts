@@ -8,9 +8,9 @@ export const mockTokenData = {
     priceChangeType: 'positive' as const,
     contractAddress: 'So11111111111111111111111111111111111111112',
     stats: [
-      { label: 'Market Cap', value: 'M' },
-      { label: '24h Volume', value: '.3M' },
-      { label: 'FDV', value: 'M' },
+      { label: 'Market Cap', value: '$45M' },
+      { label: '24h Volume', value: '$12.3M' },
+      { label: 'FDV', value: '$45M' },
     ],
     links: {
       website: '#',
@@ -50,11 +50,11 @@ export const mockTokenData = {
   ],
   orderFlow: {
     recentTrades: [
-      { time: '12:05:01', type: 'buy', amount: '1.2M', price: '/bin/zsh.048', value: '.7k', isWhale: false },
-      { time: '12:05:00', type: 'sell', amount: '500k', price: '/bin/zsh.047', value: '.3k', isWhale: false },
-      { time: '12:04:55', type: 'buy', amount: '10.5M', price: '/bin/zsh.049', value: '.4k', isWhale: true },
-      { time: '12:04:52', type: 'buy', amount: '800k', price: '/bin/zsh.047', value: '.7k', isWhale: false },
-      { time: '12:04:48', type: 'sell', amount: '2.1M', price: '/bin/zsh.046', value: '.6k', isWhale: false },
+      { time: '12:05:01', type: 'buy', amount: '1.2M', price: '$0.048', value: '$5.7k', isWhale: false },
+      { time: '12:05:00', type: 'sell', amount: '500k', price: '$0.047', value: '$2.3k', isWhale: false },
+      { time: '12:04:55', type: 'buy', amount: '10.5M', price: '$0.049', value: '$51.4k', isWhale: true },
+      { time: '12:04:52', type: 'buy', amount: '800k', price: '$0.047', value: '$3.7k', isWhale: false },
+      { time: '12:04:48', type: 'sell', amount: '2.1M', price: '$0.046', value: '$9.6k', isWhale: false },
     ],
     orderBook: {
       bids: [
@@ -75,10 +75,11 @@ export const mockTokenData = {
       gini: 0.85,
       giniRemark: 'High Inequality'
     },
-    distribution: {
-      series: [40, 25, 35],
-      labels: ['Top 10 Wallets', 'Next 100 Wallets', 'Other Wallets'],
-    },
+    distribution: [
+      { name: 'Top 10 Wallets', value: 40 },
+      { name: 'Next 100 Wallets', value: 25 },
+      { name: 'Other Wallets', value: 35 },
+    ],
     topHolders: [
       { address: 'Wallet...A5bC', label: 'Whale #1', holdings: '400M', percentage: '40.0%' },
       { address: 'Wallet...D8eF', label: 'Early Investor', holdings: '50M', percentage: '5.0%' },
@@ -86,9 +87,9 @@ export const mockTokenData = {
     ]
   },
   liquidityPools: [
-    { name: 'WIFCAT/SOL', dex: 'Raydium', liquidity: '.2M', volume: '.6M', apr: '45%' },
-    { name: 'WIFCAT/USDC', dex: 'Orca', liquidity: 'k', volume: '.1M', apr: '38%' },
-    { name: 'WIFCAT/JUP', dex: 'Jupiter', liquidity: 'k', volume: '.5M', apr: '32%' },
+    { name: 'WIFCAT/SOL', dex: 'Raydium', liquidity: '$1.2M', volume: '$5.6M', apr: '45%' },
+    { name: 'WIFCAT/USDC', dex: 'Orca', liquidity: '$800k', volume: '$3.1M', apr: '38%' },
+    { name: 'WIFCAT/JUP', dex: 'Jupiter', liquidity: '$500k', volume: '$1.5M', apr: '32%' },
   ],
   user: {
     isWalletConnected: false,

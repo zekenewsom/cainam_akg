@@ -1,47 +1,33 @@
-import React from 'react';
-import ReactApexChart from 'react-apexcharts';
-import type { ApexOptions } from 'apexcharts';
+import { Pie, PieChart, ResponsiveContainer, Cell } from 'recharts'
 
 interface HolderDistributionChartProps {
-  series: number[];
-  labels: string[];
+  data: { name: string; value: number }[];
 }
 
-const HolderDistributionChart: React.FC<HolderDistributionChartProps> = ({ series, labels }) => {
-  const options: ApexOptions = {
-    chart: {
-      type: 'donut',
-      background: 'transparent',
-    },
-    theme: {
-      mode: 'dark',
-    },
-    labels: labels,
-    plotOptions: {
-      pie: {
-        donut: {
-          labels: {
-            show: true,
-            total: {
-              show: true,
-              label: 'Total Supply',
-              formatter: () => '1B'
-            }
-          }
-        }
-      }
-    },
-    legend: {
-      position: 'bottom'
-    },
-    dataLabels: {
-      enabled: false,
-    }
-  };
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--primary) / 0.7)', 'hsl(var(--primary) / 0.4)'];
 
+export default function HolderDistributionChart({ data }: HolderDistributionChartProps) {
   return (
-    <ReactApexChart options={options} series={series} type='donut' height={350} />
-  );
-};
-
-export default HolderDistributionChart;
+    <div className="h-[250px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="value"
+          >
+            {data.map((_entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
