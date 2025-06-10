@@ -16,7 +16,8 @@ const MainLayout = () => {
             <div className='flex items-center'>
               <span className='font-bold text-xl text-teal-400'>CAINAM</span>
             </div>
-            <div className='hidden md:flex items-center space-x-4'>
+            {/* The responsive classes 'hidden md:flex' have been removed here */}
+            <div className='flex items-center space-x-4'>
               {navLinks.map((link) => (
                 <NavLink
                   key={link.name}
